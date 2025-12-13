@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Update and install all dependencies in one layer (reduces image size)
+# Update and install all dependencies in one layer
 RUN apt update && apt upgrade -y && \
     apt-get install -y \
     git \
@@ -9,11 +9,10 @@ RUN apt update && apt upgrade -y && \
     python3-pip \
     ffmpeg \
     bash \
-    software-properties-common \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Try to install neofetch if available (optional)
+# Neofetch optional - skip if not available
 RUN apt update && apt-get install -y neofetch 2>/dev/null || echo "Neofetch not available, skipping"
 
 # Copy requirements and install Python dependencies
