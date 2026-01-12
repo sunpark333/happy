@@ -1,56 +1,22 @@
-# ==============================
-# Telegram Bot Core Dependencies
-# ==============================
-pyrofork==2.3.0
-pyromod==2.0.0
-telethon==1.33.2
-tgcrypto==1.2.5
-telethon-tgcrypto==1.2.5
-
-# ==============================
-# Database & Caching
-# ==============================
-motor==3.3.2
-pymongo[srv]==4.6.0
-aioredis==2.0.0
-
-# ==============================
-# Media Processing
-# ==============================
-yt-dlp==2023.11.14
-opencv-python-headless==4.8.1.78
-Pillow==10.0.0
-ffmpeg-python==0.2.0
-numpy==1.24.3
-mutagen==1.47.0
-aiofiles==23.2.0
-
-# ==============================
-# Web & Async Framework
-# ==============================
-aiohttp==3.9.0
-Flask==3.0.0
-Werkzeug==2.2.2
-aiojobs==1.1.0
-apscheduler==3.10.4
-
-# ==============================
-# System & Utilities
-# ==============================
-psutil==5.9.0
-requests==2.31.0
-pytz==2023.3
-speedtest-cli==2.1.3
-
-# ==============================
-# Development & Security
-# ==============================
-python-dotenv==1.0.0
-pydantic==2.5.0
-urllib3==1.26.18
-python-multipart==0.0.6
-
-# ==============================
-# Custom Packages
-# ==============================
-devgagantools>=1.0.0  # या specific version अगर available है
+# https://www.dl.dropboxusercontent.com/scl/fi/35w0i0hnsioq63x7eumdd/pyrogagan.zip?rlkey=mq4b56v0z7w7mgj3c0o3sqgo1&st=n7prfm1y&dl=0
+pyrofork
+psutil
+aiofiles
+pillow
+devgagantools
+tgcrypto
+pyromod
+opencv-python-headless
+requests
+motor
+pytz
+flask
+aiohttp
+telethon
+aiojobs
+werkzeug==2.2.2
+apscheduler 
+telethon-tgcrypto
+mutagen
+yt-dlp
+speedtest-cli
