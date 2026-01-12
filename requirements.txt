@@ -20,3 +20,6 @@ telethon-tgcrypto
 mutagen
 yt-dlp
 speedtest-cli
+moviepy==1.0.3
+imageio==2.31.6
+imageio-ffmpeg==0.4.9
