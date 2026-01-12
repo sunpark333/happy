@@ -3,7 +3,6 @@
 </h1>
 
 # Important Note : 
-- Repository: https://github.com/ankitbotmaker/ritikrepo
 - Advanced content saving bot with premium features
 - All branches are working and tested for stability
 - Fork and customize as needed
