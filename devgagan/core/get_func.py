@@ -35,7 +35,8 @@ from telethon import TelegramClient, events, Button
 from devgagantools import fast_upload
 
 def thumbnail(sender):
-    return f'{sender}.jpg' if os.path.exists(f'{sender}.jpg') else None
+    path = f'/tmp/{sender}.jpg'
+    return path if os.path.exists(path) else None
 
 # MongoDB database name and collection name
 DB_NAME = "smart_users"
@@ -219,7 +220,7 @@ async def upload_media(sender, target_chat_id, file, caption, edit, topic_id):
 
     finally:
         if thumb_path and os.path.exists(thumb_path):
-            if os.path.basename(thumb_path) != f"{sender}.jpg":  # Check if the filename is not {sender}.jpg
+            if os.path.basename(thumb_path) != f"/tmp/{sender}.jpg":  # Check if the filename is not {sender}.jpg
                 os.remove(thumb_path)
         gc.collect()
 
@@ -901,7 +902,7 @@ async def save_thumbnail(event):
         temp_path = await event.download_media()
         if os.path.exists(f'{user_id}.jpg'):
             os.remove(f'{user_id}.jpg')
-        os.rename(temp_path, f'./{user_id}.jpg')
+        os.rename(temp_path, f'/tmp/{user_id}.jpg')
         await event.respond('Thumbnail saved successfully!')
 
     else:
