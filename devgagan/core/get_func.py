@@ -2,7 +2,7 @@
 # File Name: get_func.py
 # Description: A Pyrogram bot for downloading files from Telegram channels or groups 
 #              and uploading them back to Telegram.
-# Author: Pushpa Bhau
+# Author: Elexyz
 # Created: 2025-01-11
 # Last Modified: 2025-02-01
 # Version: 2.0.5
@@ -247,7 +247,7 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
             if chat in saved_channel_ids:
                 await app.edit_message_text(
                     message.chat.id, edit_id,
-                    "Sorry! This channel is protected by **__Pushpa Bhau__**."
+                    "Sorry! This channel is protected by **__Elexyz__**."
                 )
                 return
             
@@ -732,7 +732,7 @@ user_caption_preferences = {}
 async def set_rename_command(user_id, custom_rename_tag):
     user_rename_preferences[str(user_id)] = custom_rename_tag
 
-get_user_rename_preference = lambda user_id: user_rename_preferences.get(str(user_id), 'Pushpa Bhau')
+get_user_rename_preference = lambda user_id: user_rename_preferences.get(str(user_id), 'Elexyz')
 
 async def set_caption_command(user_id, custom_caption):
     user_caption_preferences[str(user_id)] = custom_caption
@@ -762,7 +762,7 @@ async def send_settings_message(chat_id, user_id):
         [Button.inline("Logout", b'logout'), Button.inline("Set Thumbnail", b'setthumb')],
         [Button.inline("Remove Thumbnail", b'remthumb'), Button.inline("Upload Method", b'uploadmethod')],
         [Button.inline("PDF Wtmrk", b'pdfwt'), Button.inline("Video Wtmrk", b'watermark')],
-        [Button.url("Report Errors", "https://t.me/PUSHPA_BHAV")]
+        [Button.url("Report Errors", "https://t.me/elexyz")]
     ]
 
     await gf.send_file(
@@ -841,7 +841,7 @@ async def callback_query_handler(event):
             [Button.inline(f"Pyrogram v2{pyrogram_check}", b'pyrogram')],
             [Button.inline(f"SpyLib v1 ⚡{telethon_check}", b'telethon')]
         ]
-        await event.edit("Choose your preferred upload method:\n\n__**Note:** **SpyLib ⚡**, built on Telethon(base), by Pushpa Bhau still in beta.__", buttons=buttons)
+        await event.edit("Choose your preferred upload method:\n\n__**Note:** **SpyLib ⚡**, built on Telethon(base), by Elexyz still in beta.__", buttons=buttons)
 
     elif event.data == b'pyrogram':
         save_user_upload_method(user_id, "Pyrogram")
@@ -1132,7 +1132,7 @@ async def handle_large_file(file, sender, edit, caption):
         if freecheck == 1:
             reply_markup = InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton("💎 Get Premium to Forward", url="https://t.me/Triplleone")]
+                    [InlineKeyboardButton("💎 Get Premium to Forward", url="https://t.me/Elexyz")]
                 ]
             )
             await app.copy_message(
