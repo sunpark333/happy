@@ -3,7 +3,7 @@
 # File Name: shrink.py
 # Description: A Pyrogram bot for downloading files from Telegram channels or groups 
 #              and uploading them back to Telegram.
-# Author: Pushpa Bhau
+# Author: Elexyz
 # Created: 2025-01-11
 # Last Modified: 2025-01-11
 # Version: 2.0.5
@@ -145,8 +145,8 @@ async def token_handler(client, message):
     if len(message.command) <= 1:
         # Get random anime image for each user
         image_url = await get_random_anime_image()
-        join_button = InlineKeyboardButton("Join Channel", url="https://t.me/PUSHPA_BHAV")
-        DEVLOPER = InlineKeyboardButton("DEVLOPER", url="https://t.me/PUSHPA_BHAV")   
+        join_button = InlineKeyboardButton("Join Channel", url="https://t.me/ElexyzBots")
+        DEVLOPER = InlineKeyboardButton("DEVLOPER", url="https://t.me/Elexyz")   
         keyboard = InlineKeyboardMarkup([
             [join_button],   
             [DEVLOPER]    
@@ -155,7 +155,7 @@ async def token_handler(client, message):
         await message.reply_photo(
             image_url,
             caption=(
-                "**🎌 Konnichiwa! Welcome to Pushpa Bhau Bot! 👋**\n\n"
+                "**🎌 Konnichiwa! Welcome to Elexyz Bot! 👋**\n\n"
                 "> **🌟 I'm your ultimate content saver bot!**\n"
                 "> **📱 Save posts from channels/groups where forwarding is disabled**\n"
                 "> **🎵 Download videos & audio from YouTube, Instagram & 30+ platforms**\n"
@@ -167,7 +167,7 @@ async def token_handler(client, message):
                 "> **• Get help: send /help**\n"
                 "> **• Get free token: send /token**\n\n"
                 "**🚀 Ready to explore? Let's get started!**\n\n"
-                "**__💫 Powered by Pushpa Bhau 💫__**"
+                "**__💫 Powered by Elexyz 💫__**"
             ),
             reply_markup=keyboard
         )
@@ -196,7 +196,7 @@ async def token_handler(client, message):
             await message.reply_photo(
                 success_image,
                 caption=(
-                    "**🎉 Verification Successful! Welcome to Pushpa Bhau! 🎉**\n\n"
+                    "**🎉 Verification Successful! Welcome to Elexyz! 🎉**\n\n"
                     "> **✅ Your free session is now active!**\n"
                     "> **⏰ Duration: 3 hours of unlimited access**\n"
                     "> **🚀 All premium features unlocked**\n"
@@ -208,7 +208,7 @@ async def token_handler(client, message):
                     "> **• Access all bot features**\n"
                     "> **• Enjoy premium experience**\n\n"
                     "**🌟 Happy downloading! 🌟**\n\n"
-                    "**__💫 Powered by Pushpa Bhau 💫__**"
+                    "**__💫 Powered by Elexyz 💫__**"
                 )
             )
             return
@@ -244,7 +244,7 @@ async def smart_handler(client, message):
                 "> **• Access all bot features**\n"
                 "> **• Enjoy premium experience**\n\n"
                 "**🌟 Keep exploring and downloading! 🌟**\n\n"
-                "**__💫 Powered by Pushpa Bhau 💫__**"
+                "**__💫 Powered by Elexyz 💫__**"
             )
         )
     else:
@@ -287,7 +287,7 @@ async def smart_handler(client, message):
                 "> **• Premium download speeds**\n"
                 "> **• All bot functions**\n\n"
                 "**🌟 Don't miss this opportunity! 🌟**\n\n"
-                "**__💫 Powered by Pushpa Bhau 💫__**"
+                "**__💫 Powered by Elexyz 💫__**"
             ),
             reply_markup=button
         )
@@ -318,7 +318,7 @@ async def id_handler(client, message):
         "> **• Share your User ID with admins for support**\n"
         "> **• Use this ID for premium activation**\n"
         "> **• Keep your ID safe and private**\n\n"
-        "**__💫 Powered by Pushpa Bhau 💫__**"
+        "**__💫 Powered by Elexyz 💫__**"
     )
     
     await message.reply_photo(
