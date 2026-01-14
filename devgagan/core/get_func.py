@@ -34,6 +34,10 @@ from devgagan.core.mongo import db as odb
 from telethon import TelegramClient, events, Button
 from devgagantools import fast_upload
 
+# Pyrogram version check
+import pyrogram
+print(f"🔧 Pyrogram Version: {pyrogram.__version__}")
+
 def thumbnail(sender):
     return f'{sender}.jpg' if os.path.exists(f'{sender}.jpg') else None
 
@@ -58,7 +62,6 @@ else:
 async def fetch_upload_method(user_id):
     """Fetch the user's preferred upload method."""
     user_data = collection.find_one({"user_id": user_id})
-    user_data = collection.find_one({"user_id": user_id})
     return user_data.get("upload_method", "Pyrogram") if user_data else "Pyrogram"
 
 async def get_log_topic_id(user_id, app):
@@ -77,29 +80,19 @@ async def get_log_topic_id(user_id, app):
         return user_data["log_topic_id"]
     
     # Create a new topic if not exists
-   try:
-    user = await app.get_users(user_id)
-    topic_name = f"{user.first_name} ({user_id})"
-
-    from pyrogram.raw.functions.channels import CreateForumTopic
-
-    result = await app.invoke(
-        CreateForumTopic(
-            chat_id=int(LOG_GROUP),
-            title=topic_name
+    try:
+        user = await app.get_users(user_id)
+        topic_name = f"{user.first_name} ({user_id})"
+        # Pyrogram v2.3.69 uses 'chat_id' parameter
+        topic = await app.create_forum_topic(chat_id=LOG_GROUP, title=topic_name)
+        topic_id = topic.message_thread_id
+        
+        # Save topic_id to database
+        collection.update_one(
+            {"user_id": user_id},
+            {"$set": {"log_topic_id": topic_id}},
+            upsert=True
         )
-    )
-
-    topic_id = result.message_thread_id
-
-    collection.update_one(
-        {"user_id": user_id},
-        {"$set": {"log_topic_id": topic_id}},
-        upsert=True
-    )
-
-       #save topic id
-       
         return topic_id
     except Exception as e:
         print(f"Error creating topic for user {user_id}: {e}")
@@ -117,8 +110,6 @@ async def format_caption_to_html(caption: str) -> str:
     caption = re.sub(r"\|\|(.*?)\|\|", r"<details>\1</details>", caption)
     caption = re.sub(r"\[(.*?)\]\((.*?)\)", r'<a href="\2">\1</a>', caption)
     return caption.strip() if caption else None
-    
-
 
 async def upload_media(sender, target_chat_id, file, caption, edit, topic_id):
     try:
@@ -234,7 +225,6 @@ async def upload_media(sender, target_chat_id, file, caption, edit, topic_id):
                 os.remove(thumb_path)
         gc.collect()
 
-
 async def get_msg(userbot, sender, edit_id, msg_link, i, message):
     try:
         # Sanitize the message link
@@ -322,10 +312,6 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
         file_size = get_message_file_size(msg)
         freecheck = await chk_user(message, sender)
 
-        # if file_size and file_size > size_limit and pro is None:
-        #     await app.edit_message_text(sender, edit_id, "**❌ 4GB Uploader not found**")
-        #     return
-
         file_name = await get_media_filename(msg)
         edit = await app.edit_message_text(sender, edit_id, "**Downloading...**")
 
@@ -359,7 +345,6 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
             os.remove(file)
             return
 
-
         if msg.video_note:
             result = await app.send_video_note(target_chat_id, file, reply_to_message_id=topic_id)
             topic_id_log = await get_log_topic_id(sender, app)
@@ -378,7 +363,6 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
             return
 
         # Upload media
-        # await edit.edit("**Checking file...**")
         if file_size > size_limit and (freecheck == 1 or pro is None):
             await edit.delete()
             await split_and_upload_file(app, sender, target_chat_id, file, caption, topic_id)
@@ -391,7 +375,6 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
     except (ChannelBanned, ChannelInvalid, ChannelPrivate, ChatIdInvalid, ChatInvalid):
         await app.edit_message_text(sender, edit_id, "Have you joined the channel?")
     except Exception as e:
-        # await app.edit_message_text(sender, edit_id, f"Failed to save: `{msg_link}`\n\nError: {str(e)}")
         print(f"Error: {e}")
     finally:
         # Clean up
@@ -415,14 +398,12 @@ async def clone_text_message(app, msg, sender, target_chat_id, topic_id, edit_id
     await devgaganin.copy(LOG_GROUP, reply_to_message_id=topic_id_log)
     await edit.delete()
 
-
 async def handle_sticker(app, msg, sender, target_chat_id, topic_id, edit_id, log_group):
     edit = await app.edit_message_text(sender, edit_id, "Handling sticker...")
     result = await app.send_sticker(target_chat_id, msg.sticker.file_id, reply_to_message_id=topic_id)
     topic_id_log = await get_log_topic_id(sender, app)
     await result.copy(LOG_GROUP, reply_to_message_id=topic_id_log)
     await edit.delete()
-
 
 async def get_media_filename(msg):
     if msg.document:
@@ -469,7 +450,6 @@ async def get_final_caption(msg, sender):
     except Exception as e:
         print(f"Error in get_final_caption: {e}")
         return None
-
 
 async def download_user_stories(userbot, chat_id, msg_id, edit, sender):
     try:
@@ -581,14 +561,10 @@ async def copy_message_with_chat_id(app, userbot, sender, chat_id, message_id, e
     except Exception as e:
         print(f"Error : {e}")
         pass
-        #error_message = f"Error occurred while processing message: {str(e)}"
-        # await app.send_message(sender, error_message)
-        # await app.send_message(sender, f"Make Bot admin in your Channel - {target_chat_id} and restart the process after /cancel")
 
     finally:
         if file and os.path.exists(file):
             os.remove(file)
-
 
 async def send_media_message(app, target_chat_id, msg, caption, topic_id):
     try:
@@ -708,7 +684,6 @@ def save_user_data(user_id, key, value):
     except Exception as e:
         print(f"Error saving {key}: {e}")
 
-
 # Delete and replacement word functions - using MongoDB for persistence
 async def load_delete_words(user_id):
     """Load delete words from MongoDB"""
@@ -750,7 +725,6 @@ async def set_caption_command(user_id, custom_caption):
 get_user_caption_preference = lambda user_id: user_caption_preferences.get(str(user_id), '')
 
 # Initialize the dictionary to store user sessions
-
 sessions = {}
 m = None
 SET_PIC = "settings.jpg"
@@ -781,7 +755,6 @@ async def send_settings_message(chat_id, user_id):
         caption=MESS,
         buttons=buttons
     )
-
 
 pending_photos = {}
 
@@ -912,7 +885,7 @@ async def save_thumbnail(event):
         temp_path = await event.download_media()
         if os.path.exists(f'{user_id}.jpg'):
             os.remove(f'{user_id}.jpg')
-        os.rename(temp_path, f'/{user_id}.jpg')
+        os.rename(temp_path, f'{user_id}.jpg')  # Fixed: removed extra '/'
         await event.respond('Thumbnail saved successfully!')
 
     else:
@@ -1075,7 +1048,6 @@ async def lock_command_handler(event):
     except Exception as e:
         await event.respond(f"Error occurred while locking channel ID: {str(e)}")
 
-
 async def handle_large_file(file, sender, edit, caption):
     if pro is None:
         await edit.edit('**__ ❌ 4GB trigger not found__**')
@@ -1203,7 +1175,6 @@ async def rename_file(file, sender):
     await asyncio.to_thread(os.rename, file, new_file_name)
     return new_file_name
 
-
 async def sanitize(file_name: str) -> str:
     sanitized_name = re.sub(r'[\\/:"*?<>|]', '_', file_name)
     # Strip leading/trailing whitespaces
@@ -1218,7 +1189,6 @@ async def is_file_size_exceeding(file_path, size_limit):
     except Exception as e:
         print(f"Error while checking file size: {e}")
         return False
-
 
 user_progress = {}
 
@@ -1284,7 +1254,6 @@ def progress_callback(done, total, user_id):
     
     return final
 
-
 def dl_progress_callback(done, total, user_id):
     # Check if this user already has progress tracking
     if user_id not in user_progress:
@@ -1347,8 +1316,7 @@ def dl_progress_callback(done, total, user_id):
     
     return final
 
-# split function .... ?( to handle gareeb bot coder jo string n lga paaye)
-
+# split function
 async def split_and_upload_file(app, sender, target_chat_id, file_path, caption, topic_id):
     if not os.path.exists(file_path):
         await app.send_message(sender, "❌ File not found!")
