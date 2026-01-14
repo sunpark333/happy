@@ -77,18 +77,29 @@ async def get_log_topic_id(user_id, app):
         return user_data["log_topic_id"]
     
     # Create a new topic if not exists
-    try:
-        user = await app.get_users(user_id)
-        topic_name = f"{user.first_name} ({user_id})"
-        topic = await app.create_forum_topic(chat_id=LOG_GROUP, title=topic_name)
-        topic_id = topic.message_thread_id
-        
-        # Save topic_id to database
-        collection.update_one(
-            {"user_id": user_id},
-            {"$set": {"log_topic_id": topic_id}},
-            upsert=True
+   try:
+    user = await app.get_users(user_id)
+    topic_name = f"{user.first_name} ({user_id})"
+
+    from pyrogram.raw.functions.channels import CreateForumTopic
+
+    result = await app.invoke(
+        CreateForumTopic(
+            chat_id=int(LOG_GROUP),
+            title=topic_name
         )
+    )
+
+    topic_id = result.message_thread_id
+
+    collection.update_one(
+        {"user_id": user_id},
+        {"$set": {"log_topic_id": topic_id}},
+        upsert=True
+    )
+
+       #save topic id
+       
         return topic_id
     except Exception as e:
         print(f"Error creating topic for user {user_id}: {e}")
